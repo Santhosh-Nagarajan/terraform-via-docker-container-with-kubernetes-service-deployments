@@ -36,3 +36,55 @@ jobs:
       run: sudo terraform apply -var="number=${{ github.run_number }}"  --auto-approve
     - name: Read Image_Count
       run: cat image_count.txt
+
+
+
+
+      name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - master  # Change this to your main branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # The runner to use
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2  # Action to checkout your repository
+
+    - name: Setup Minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start
+      
+    - name: Enable Minikube addons
+      run: minikube addons enable metrics-server
+
+    - name: Get namespaces 
+      run: kubectl get ns
+
+    - name: Create Service Account 
+      run: |
+        kubectl create serviceaccount default
+        kubectl config set-context --current --namespace=default
+        kubectl taint nodes minikube node.kubernetes.io/not-ready-
+        
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f pod-definition.yaml
+        sleep 60 && kubectl get pod
+        
+
+    - name: Get pods
+      run: |
+        kubectl get pod
+        
+        
+        
+    - name: Describe pod
+      run: kubectl describe pod react-app-pod
