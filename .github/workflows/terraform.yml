@@ -40,14 +40,6 @@ jobs:
 
 
 
-      name: Deploy to Kubernetes
-
-on:
-  push:
-    branches:
-      - master  # Change this to your main branch name
-
-jobs:
   deploy:
     runs-on: ubuntu-latest  # The runner to use
 
@@ -76,8 +68,9 @@ jobs:
 
     - name: Deploy to Kubernetes
       run: |
-        kubectl apply -f pod-definition.yaml
+        kubectl apply -f python.yaml
         sleep 60 && kubectl get pod
+        kubectl get svc
         
 
     - name: Get pods
@@ -87,4 +80,4 @@ jobs:
         
         
     - name: Describe pod
-      run: kubectl describe pod react-app-pod
+      run: kubectl describe pod my-deployment
