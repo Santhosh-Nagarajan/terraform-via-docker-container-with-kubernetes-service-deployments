@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: my-container
-          image: santhoshsp/python:1
+          image: santhoshsp/python:5
           ports:
             - containerPort: 5000
 
