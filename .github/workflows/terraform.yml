@@ -1,0 +1,38 @@
+name: Terraform Module Use React javascript ecommerce Website
+
+on:
+  push:
+    branches:
+      - master
+env:
+    DOCKER_BUILD_VERSION: ${{ github.run_number }}
+    
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.3   # Specify the desired Terraform version
+
+    - name: Terraform Init
+      run: sudo terraform init
+      
+    - name: Terraform Format
+      run: sudo terraform fmt
+      
+    - name: Terraform Validation
+      run: sudo terraform validate
+      
+    - name: Terraform Plan
+      run: sudo terraform plan -var="number=${{ github.run_number }}" 
+
+    - name: Terraform Apply
+      run: sudo terraform apply -var="number=${{ github.run_number }}"  --auto-approve
+    - name: Read Image_Count
+      run: cat image_count.txt
