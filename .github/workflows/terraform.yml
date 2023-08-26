@@ -1,4 +1,4 @@
-name: Terraform Module Use React javascript ecommerce Website
+name: Terraform Via Docker Container Run and Kubernetes Engine Service and Deployment using Github Action
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
 
 
 
-  deploy:
+  deploy_2:
     runs-on: ubuntu-latest  # The runner to use
 
     steps:
